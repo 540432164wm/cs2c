@@ -1,0 +1,290 @@
+﻿Question 2: 
+
+Sorted List: Insert will take O(n) time, because It need to iterate
+whole list to finish insertion. 
+Remove will take O(1) time, we have access to the first node.
+
+Unsorted List: Insert takes O(1) time
+because we only insert at the back of the list. 
+Remove will take O(n) time, because we need to iterate whole list to find the minimum.
+
+
+
+
+heap sort: Insert will take O(n) time, when we insert a node, It need to go through and compare with every parent and get to the right position. 
+Remove will take O(logn) time, when we try to remove a
+node, it need to search the child which have the minimum value and return it so it is shorter than go to each parents.
+
+
+Question 4:
+Sorted List: 
+Insert time does not change cause it will still compare the number we want to insert with privious number. Remove won't change, because the list is sorted, remove only take constant time.
+Insert will take O(n) time
+Remove will take O(1) time
+
+Unsorted List:
+Insert time does not change cause it will simply do this by push back. Remove won't change, because still travel whole list.
+Insert takes O(1) time
+Remove will take O(n) time.
+
+Heap sorted:
+Nothing change. this is the best case
+for max heap sort tree, because the large number will be always
+the root, save many switch time.
+Insert will take O(n) time
+Remove will take O(logn) time
+----------------unsorted list----------------
+
+
+Size = 5000 inserted into unsortedListPQ.Elapsed Time: 0.000538 seconds.
+
+
+List is empty, can't remove
+
+
+Size = 5000 remove from unsortedListPQ.Elapsed Time: 0.286054 seconds.
+
+
+
+
+---------------sorted list--------------------
+
+
+Size = 5000 inserted into sortedListPQ.Elapsed Time: 0.690564 seconds.
+
+
+
+
+Size = 5000 remove from sortedListPQ.Elapsed Time: 0.000449 seconds.
+
+
+
+
+------------------------heapPQ------------------
+
+
+Size = 5000 insert from heapPQ.Elapsed Time: 0.000404 seconds.
+
+
+
+
+Size = 5000 remove from heapPQ.Elapsed Time: 0.001942 seconds.
+
+
+
+
+----------------unsorted list----------------
+
+
+Size = 10000 inserted into unsortedListPQ.Elapsed Time: 0.000892 seconds.
+
+
+List is empty, can't remove
+
+
+Size = 10000 remove from unsortedListPQ.Elapsed Time: 1.18028 seconds.
+
+
+
+
+---------------sorted list--------------------
+
+
+Size = 10000 inserted into sortedListPQ.Elapsed Time: 3.01126 seconds.
+
+
+
+
+Size = 10000 remove from sortedListPQ.Elapsed Time: 0.000933 seconds.
+
+
+
+
+------------------------heapPQ------------------
+
+
+Size = 10000 insert from heapPQ.Elapsed Time: 0.000815 seconds.
+
+
+
+
+Size = 10000 remove from heapPQ.Elapsed Time: 0.003951 seconds.
+
+
+
+
+----------------unsorted list----------------
+
+
+Size = 20000 inserted into unsortedListPQ.Elapsed Time: 0.001732 seconds.
+
+
+List is empty, can't remove
+
+
+Size = 20000 remove from unsortedListPQ.Elapsed Time: 4.59732 seconds.
+
+
+
+
+---------------sorted list--------------------
+
+
+Size = 20000 inserted into sortedListPQ.Elapsed Time: 12.2424 seconds.
+
+
+
+
+Size = 20000 remove from sortedListPQ.Elapsed Time: 0.001519 seconds.
+
+
+
+
+------------------------heapPQ------------------
+
+
+Size = 20000 insert from heapPQ.Elapsed Time: 0.001319 seconds.
+
+
+
+
+Size = 20000 remove from heapPQ.Elapsed Time: 0.007577 seconds.
+
+
+
+//---------------------------Reverse order-------------------------------
+Sorted List:
+insert is O(1), this is best case for insert, when we insert we only compare one number when
+doing insertion which is just one number in front of it. 
+Remove no change, have access of first number.
+Remove will take O(1) time
+
+
+Unsorted List:
+Insert time does not change cause it will simply do this by push back. Remove won't change, because still travel whole list.
+Insert takes O(1) time
+Remove will take O(n) time.
+
+
+
+heap sorted:
+Insert not change but this is the worst
+case for max heap tree. because we are insert the number smaller than then any one we inserted before,
+so the tree need to swap everytime we do the insertion. 
+Remove, nothing change
+Remove will take O(logn) time
+
+----------------unsorted list----------------
+
+
+Size = 5000 inserted into unsortedListPQ.Elapsed Time: 0.000488 seconds.
+
+
+List is empty, can't remove
+
+
+Size = 5000 remove from unsortedListPQ.Elapsed Time: 0.288052 seconds.
+
+
+
+
+---------------sorted list--------------------
+
+
+Size = 5000 inserted into sortedListPQ.Elapsed Time: 0.410273 seconds.
+
+
+
+
+Size = 5000 remove from sortedListPQ.Elapsed Time: 0.000535 seconds.
+
+
+
+
+------------------------heapPQ------------------
+
+
+Size = 5000 insert from heapPQ.Elapsed Time: 0.001323 seconds.
+
+
+
+
+Size = 5000 remove from heapPQ.Elapsed Time: 0.002082 seconds.
+
+
+
+
+----------------unsorted list----------------
+
+
+Size = 10000 inserted into unsortedListPQ.Elapsed Time: 0.000786 seconds.
+
+
+List is empty, can't remove
+
+
+Size = 10000 remove from unsortedListPQ.Elapsed Time: 1.13107 seconds.
+
+
+
+
+---------------sorted list--------------------
+
+
+Size = 10000 inserted into sortedListPQ.Elapsed Time: 1.70635 seconds.
+
+
+
+
+Size = 10000 remove from sortedListPQ.Elapsed Time: 0.000778 seconds.
+
+
+
+
+------------------------heapPQ------------------
+
+
+Size = 10000 insert from heapPQ.Elapsed Time: 0.001426 seconds.
+
+
+
+
+Size = 10000 remove from heapPQ.Elapsed Time: 0.00375 seconds.
+
+
+----------------unsorted list----------------
+
+
+Size = 20000 inserted into unsortedListPQ.Elapsed Time: 0.001446 seconds.
+
+
+List is empty, can't remove
+
+
+Size = 20000 remove from unsortedListPQ.Elapsed Time: 4.5808 seconds.
+
+
+
+
+---------------sorted list--------------------
+
+
+Size = 20000 inserted into sortedListPQ.Elapsed Time: 7.96532 seconds.
+
+
+
+
+Size = 20000 remove from sortedListPQ.Elapsed Time: 0.00173 seconds.
+
+
+
+
+------------------------heapPQ------------------
+
+
+Size = 20000 insert from heapPQ.Elapsed Time: 0.002683 seconds.
+
+
+
+
+Size = 20000 remove from heapPQ.Elapsed Time: 0.00771 seconds.

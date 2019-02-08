@@ -1,0 +1,76 @@
+﻿#include <iostream>
+#include <iomanip>
+using namespace std;
+
+
+#define MAT_SIZE 1000
+typedef float* DynMat[MAT_SIZE];
+
+
+//--------------------global function prototype----------------------
+void matMultDyn(const DynMat & matA, const DynMat & matB,
+                DynMat & matC, int size);
+void matShowDyn(const DynMat & matA, int start, int size);
+
+
+//--------------------global function definition---------------------
+void matMultDyn(const DynMat & matA, const DynMat & matB,
+                DynMat & matC, int size) {
+    float result;
+    
+    for (int row = 0; row < size; row++) {
+        for (int col = 0; col < size; col++) {
+            result = 0;
+            for (int rowIndex = 0; rowIndex < size; rowIndex++) {
+                result += matA[row][rowIndex] * matB[rowIndex][col];
+            }
+            matC[row][col] = result;
+        }
+    }
+}
+
+
+void matShowDyn(const DynMat & matA, int start, int size) {
+    int maxSize = start + size;
+    
+    if (start < 0 || size < 0 || start + size > MAT_SIZE) {
+        cout << "The size is out of range." << endl;
+        return;
+    }
+    
+    for (int row = start; row < maxSize; row++) {
+        for (int col = start; col < maxSize; col++) {
+            cout << setiosflags(ios::fixed) << matA[row][col] << " ";
+        }
+        cout << endl;
+    }
+    cout << "\n" << endl;
+}
+
+
+/*-----------------------------Ouput--------------------------------
+ Question to answer:
+ 1.What was the smallest M that gave you a non-zero time?
+ 
+ 10, the time is .000006 sec.
+ 
+ 2.What happened when you doubled M , tripled it, quadrupled it, etc?
+ Give several M values and their times in a table.
+ 
+ Size      Time
+ 10        .000006
+ 100       .003808
+ 1000      11.378927
+ 10000     wait for too long
+ 
+ 3.How large an M can you use before the program refuses to run
+ (exception or run-time error due to memory overload) or it takes
+ so long you can't wait for the run?
+ 
+ I enter 100000 and it does not show anything even not the matrix. After wait for
+ like 1 minute it shows "matDynAns[r][c] = 0;" is a break point.
+ 
+ 4.How did the data agree or disagree with your original time complexity estimate?
+ I think it is disagree with my estimate and it's seems not follow the same
+ pattern. 11.378927/.003808 is 2888something but .003808/000006 is 678 something.
+ */

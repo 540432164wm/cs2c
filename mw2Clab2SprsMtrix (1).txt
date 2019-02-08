@@ -1,0 +1,167 @@
+﻿// Test and demo of FHlist class template
+// CS 2C, Foothill College, Michael Loceff, creator
+
+
+#ifndef SPARSE_MATRICES
+#define SPARSE_MATRICES
+#include <iostream>
+#include <iomanip>
+
+
+using namespace std;
+
+
+#include "FHlist.h"
+#include "FHvector.h"
+
+
+template <class Object>
+class MatNode
+{
+protected:
+    int col;
+    
+public:
+    Object data;
+    // we need a default constructor for lists
+    MatNode(int cl = 0, Object dt = Object()) : col(cl), data(dt) {}
+    int getCol() const { return col; }
+    
+    // not optimized yet for set() = defaultVal;  refer to forums
+    const Object & operator=( const Object &x ) { return (data = x);}
+};
+
+
+template<class Object>
+class SparseMat{
+private:
+    bool Valid(int r, int c) const;
+protected:
+    
+    typedef FHlist<MatNode<Object> > MatRow;
+    typedef FHvector<MatRow> MasterCol;
+    MasterCol rows;
+    Object defaultVal;
+    int rowSize, colSize;
+    
+public:
+    SparseMat( int r, int c, const Object & defaultVal);
+    const Object & get(int r, int c) const;
+    class OutOfBoundsException { };
+    bool set(int r, int c, const Object &x);
+    void clear();
+    void showSubSquare(int start, int size);
+};
+
+
+
+
+// SparseMat method definitions ---------------------------------------------
+template <class Object>
+SparseMat<Object>::SparseMat( int r, int c, const Object & defaultVal)
+{
+    if (r < 1)
+        r = 1;
+    if (c < 1)
+        c = 1;
+    
+    rowSize = r;
+    colSize = c;
+    this->defaultVal = defaultVal;
+    rows.resize(r);
+    
+}
+
+
+template <class Object>
+const Object& SparseMat<Object>::get(int r, int c)const
+{
+    typename MatRow::const_iterator iter;
+    const MatRow *thisRow;
+    if (!Valid(r, c)){
+        throw OutOfBoundsException();
+        //return false;
+    }
+    thisRow = &rows[r];
+    for ( iter = thisRow -> begin(); iter != thisRow -> end(); iter++) {
+        if ((*iter).getCol() == c)
+            return (*iter).data;
+    }
+    
+    return defaultVal;
+}
+
+
+template <class Object>
+bool SparseMat<Object>::set(int r, int c, const Object &x)
+{
+    if (!Valid(r, c))
+        return false;
+    
+    typename MatRow::iterator iter;
+    MatRow *thisRow;
+    thisRow = &rows[r];
+    for ( iter = thisRow -> begin(); iter != thisRow -> end(); iter++) {
+        if ((*iter).getCol() == c){
+            if (x == defaultVal){
+                thisRow->erase(iter);
+            }else{
+                (*iter).data = x;
+                return true;
+            }
+        }
+    }
+    //if no node found
+    if (x != defaultVal)
+        thisRow->push_back(MatNode<Object>(c, x));
+    return true;
+}
+
+
+template <class Object>
+void SparseMat<Object>::clear(){
+    int r;
+    int tempSize = rows.size();
+    for (r = 0; r < rowSize; r++)
+        rows[r].clear();
+    rows.resize(tempSize);
+}
+
+
+template <class Object>
+void SparseMat<Object>::showSubSquare(int start, int size){
+    int r, c;
+    int maxSize = start + size;
+    if (size > maxSize)
+        size = maxSize;
+    if ((start < 0) || (size < 0) || (maxSize > rowSize) || (maxSize > colSize))
+    {
+        cout << "can not display matrix that are smeller than 0";
+        return;
+    }
+    cout << "none";
+    
+    for (r = start; r < maxSize ; r++)
+    {
+        for (c = start; c < maxSize ; c++)
+        {
+            cout << setw(3);
+            
+            cout << get(r, c) << " ";
+        }
+        cout << endl;
+    }
+    cout << endl << endl;
+    
+}
+
+
+template <class Object>
+bool SparseMat<Object>::Valid(int r, int c) const {
+    if (r < 0 || r >= rowSize || c < 0 || c >= colSize)
+        return false;
+    return true;
+}
+
+
+#endif

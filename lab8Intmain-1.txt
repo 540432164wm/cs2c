@@ -1,0 +1,79 @@
+﻿srand((unsigned)time(NULL));
+    int i, k, recLimit;
+    clock_t startTime, stopTime;
+    const int maxLimited = 100;
+    FHvector<int> fhVectorOfInts;
+    ofstream outputFile, compareFile;
+    vector<double> timeData;
+    bool gapOutput = false;
+    int arraySize[] = { 40000, 80000, 120000, 160000 };
+    int numSizesToTest = sizeof(arraySize) / sizeof(arraySize[0]);
+    
+    //Create the file
+    outputFile.open("QuickSortX.csv");
+    
+    outputFile << "gap, 40000, 80000, 120000, 160000 \n";
+    
+    for (i = 0; i < numSizesToTest; i++) {
+        vector<int> randNumbersToInsert;
+        int numNumbers = arraySize[i];
+        
+        cout << "size is:" << numNumbers << endl;
+        // fullfill the vector
+        for (k = 0; k < numNumbers; k++) {
+            int r = rand() / (double)RAND_MAX * numNumbers * 5;
+            randNumbersToInsert.push_back(r);
+        }
+        
+        // Push back the number
+        for (recLimit = 2; recLimit <= maxLimited; recLimit += 2) {
+            fhVectorOfInts.clear();
+            for (k = 0; k < numNumbers; k++)
+                fhVectorOfInts.push_back(randNumbersToInsert[k]);
+            
+            //Output the gap only one time
+            if (!gapOutput) {
+                timeData.push_back(recLimit);
+                if (recLimit == maxLimited) {
+                    gapOutput = true;
+                }
+            }
+            
+            //Time the select algorithm
+            startTime = clock();
+            quickSortX(fhVectorOfInts, recLimit);
+            stopTime = clock();
+        }
+    }
+
+
+    outputFile.close();
+   
+//----------------------------part 2----------------------------------
+    FHvector<int> fhQuickSort;
+    FHvector<int> fhInsertionSort;
+    FHvector<int> fhMergeSort;
+    FHvector<int> fhHeapSort;
+    FHvector<double> dataComparation;
+    double quickSortTime, heapSortTime, insertionSortTime, mergeSortTime;
+    
+    compareFile.open("CompareAlgorithm.csv");
+    compareFile << ", 40000, 80000, 120000, 160000" << "\n";
+    
+    for (int i = 0; i < numSizesToTest; i++) {
+       int numNumbers = arraySize[i];
+    
+       cout << "size is:" << numNumbers << endl;
+       // fullfill the vector
+       for (int k = 0; k < numNumbers; k++) {
+          int r = rand() / (double)RAND_MAX * numNumbers * 5;
+          fhQuickSort.push_back(r);
+          fhInsertionSort.push_back(r);
+          fhMergeSort.push_back(r);
+          fhHeapSort.push_back(r);
+       }
+    }
+
+
+    return 0;
+}

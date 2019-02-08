@@ -1,0 +1,53 @@
+﻿Step1:
+Method: addEdge() (line 229 - 243)
+src->addToFlowAdjList(dst, (CostType)0);
+src->addToResAdjList(dst, cost);
+dst->addToResAdjList(src, (CostType)0);
+
+Step2:
+Method: findMaxFlow() (line 468 - 472) 
+while (establishNextFlowPath())
+    {
+        limitResFlow = getLimitingFlowOnResPath();
+        adjustPathByCost(limitResFlow);
+    }
+
+Step3:
+Method: findMaxFlow() (line 468 - 472)
+Will call the whole fucntion of establishNextFlowPath(), same as step 2.
+while (establishNextFlowPath())
+    {
+        limitResFlow = getLimitingFlowOnResPath();
+        adjustPathByCost(limitResFlow);
+    }
+
+Step4:
+getLimitingFlowOnResPath()(line 349)
+minFlow = getCostOfResEdge(vp, endVertPtr);（line 359）
+tempEdgeCost = getCostOfResEdge(vp->nextInPath, vp);（line 367）   
+if (tempEdgeCost < minFlow)
+        minFlow = tempEdgeCost;
+  }
+
+Step5:
+Method: adjustPathByCost() (line 388)
+if (!addCostToResEdge(vp->nextInPath, vp, -cost)) // dec. res path by cost
+        return false;
+
+Step6:
+Method: adjustPathByCost() (line 390)
+if (!addCostToResEdge(vp, vp->nextInPath, cost)) // inc. undo path by cost
+        return false;
+
+Step7:
+Method: adjustPathByCost() (line 392)
+if (!addCostToFlowEdge(vp->nextInPath, vp, cost)) // add to flow graph
+        return false;
+
+Step8:
+Method: findMaxFlow() (line 477)
+        for (iter = startVertPtr->flowAdjList.begin();
+                iter != startVertPtr->flowAdjList.end(); iter++)
+        {
+                result += iter->second;
+        }

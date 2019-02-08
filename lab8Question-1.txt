@@ -1,0 +1,40 @@
+﻿Question2:
+
+
+Sorted List:
+The insertion and deletion of elements in a sorted array executes at O(n), due to the need to shift all the elements following the element to be inserted or deleted. In the case where elements are deleted or inserted at the end, a sorted dynamic array can do this in O(1) time.
+
+
+Unsorted List:
+Insert: O(1)
+we only insert the back of the list, so it is constant.
+Delete: O(n)
+we need to iterate the whole list to find the minimum since the list is unsorted.
+
+
+Heap Sort:
+The insertion and remove have a worst-case time complexity of O(nlog n) cause when we insert a node, it will compare with
+its parent and get to the right position, that takes log n; and we need to iterate the whole list and it is O(n). So total is O(nlog n). Remove is iterate the whole list and search the node that has min value to remove.
+
+
+
+
+Quick Sort:
+O(n^2)
+When size is 40000, time is .0091; when size is 160000,(n is 4) time is .079. 0.079/0.0091 = 9; (0.5)(4*4)=8 -> 0.5*(n^2) -> n^2
+
+
+Merge Sort:
+O(nlog n)
+When size is 40000, time is .02; When size is 160000, time is 0.2. It is 0.2/0.02 = 10;
+4*4*log 4=9 -> 4nlog n -> nlog n
+
+
+Heap Sort:
+O(nlog n)
+When size is 40000, time is .017; When size is 160000, time is 0.2. It is 0.17/0.02 = 10; 4*4*log 4=9 -> 4nlog n -> nlog n
+
+
+Insertion Sort:
+O(n^2)
+When size is 40000, time is 5; When size is 160000, time is 208. it is 208/5=40; 4*4*2.5=40 -> (n^2)*2.5 -> n^2

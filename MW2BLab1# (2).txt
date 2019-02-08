@@ -1,0 +1,551 @@
+﻿#include <vector>
+#include <iostream>
+#include "iTunes.h"
+using namespace std;
+
+
+//-------------------------------class Sublist prototype--------------
+class Sublist
+{
+public:
+    Sublist(vector<iTunesEntry> *orig = NULL)
+    : sum(0), originalObjects(orig) { }
+    Sublist addItem(int indexOfItemToAdd);
+    void showSublist() const;
+    int getSum() const { return sum; }
+    friend ostream& operator<<(ostream& out, const iTunesEntry& object);
+    friend int operator+(const int left, const iTunesEntry& right);
+    //friend ostream& operator<<(ostream& str, const iTunesEntry& s);
+    //friend int operator+(const int& lhs, const iTunesEntry& rhs);
+     //iTunesEntry &operator[](int k);
+
+
+    
+private:
+    int sum;
+    vector<iTunesEntry> *originalObjects;
+    vector<int> indices;
+};
+
+
+//------------------------------Class Sublist definition----------------
+//Display
+ostream& operator<<(ostream& out, const iTunesEntry& object) {
+    out << object.getTitle() << " by " << object.getArtist() << "("
+    << object.getTime() << ")";
+    return out;
+}
+
+
+//overload "+"
+int operator+(const int left, const iTunesEntry& right) {
+    return left + right.getTime();
+}
+
+
+Sublist Sublist::addItem(int indexOfItemToAdd) {
+    Sublist newSublist = *this;
+    newSublist.indices.push_back(indexOfItemToAdd);
+    newSublist.sum = newSublist.sum + originalObjects->at(indexOfItemToAdd);
+    return newSublist;
+}
+
+
+//Show all the sublist that within the target, no greater sum of target should
+//be displayed
+void Sublist::showSublist() const {
+    //If there is no sublist that met requirement
+    if (indices.size() == 0) {
+        cout << "No subList found." << endl;
+    }
+    else {
+        cout << "\nSublist is-------------------------------------------" << '\n'
+        << "sum: " << sum << "\n" << endl;
+        
+        for (unsigned int i = 0; i < indices.size() - 1; i++) {
+            cout << "array[" << indices[i] << "] = "
+            << originalObjects->at(indices[i]) << ", ";
+        }
+        cout << "array[" << indices[indices.size() - 1] << "] = "
+        << originalObjects->at(indices[indices.size() - 1]) << '\n' << endl;
+    }
+}
+
+
+//------------------------------Global helper prototype----------------------------
+//void subsetSumInt(int TARGET, vector<int> dataSet);
+void subsetSumTunes(int TARGET, vector<iTunesEntry> dataSet);
+void displayOneTune(const iTunesEntry & tune);
+
+
+//------------------------------Gobal Definition----------------------------
+
+
+//void subsetSumTunes(int TARGET, vector<iTunesEntry> dataSet) {
+//    
+//    vector<Sublist> choices;
+//    int numSets, max, masterSum;
+//    numSets = 0;
+//    max = 0;
+//    masterSum = 0;
+//    bool foundPerfect = false;
+//
+//    choices.clear();
+//    cout << "Target time: " << TARGET << endl;
+//    choices.push_back(Sublist(&dataSet));
+//    vector<iTunesEntry>::iterator i;
+//    for (i = dataSet.begin(); i != dataSet.end(); i++) {
+//        masterSum = masterSum + *i;
+//    }
+//
+//    //If the sum of the master list smaller or equal to the target, then show
+//    //all the elements
+//    if (masterSum <= TARGET) {
+//        Sublist bestSublist = Sublist(&dataSet);
+//        for (unsigned int k = 0; k < dataSet.size(); k++) {
+//            bestSublist = bestSublist.addItem(k);
+//        }
+//        choices.push_back(bestSublist);
+//        numSets = choices.size() - 1;
+//        choices[numSets].showSublist();
+//        foundPerfect = true;
+//    }
+//
+//    //If the sum of the master list bigger than the target
+//    Sublist tempList;
+//    int size;
+//    //If the master set is empty
+//    if (dataSet.size() == 0) {
+//        cout << "\nNo empty master set please.\n" << endl;
+//    }
+//    else {
+//        for (unsigned int i = 0; !foundPerfect && i < dataSet.size(); i++) {
+//            size = choices.size();
+//
+//            for (int k = 0; !foundPerfect && k < size; k++) {
+//                tempList = choices[k].addItem(i);
+//
+//                if (tempList.getSum() <= TARGET) {
+//                    choices.push_back(tempList);
+//
+//                    if (tempList.getSum() == TARGET) {
+//                        numSets = choices.size() - 1;
+//                        foundPerfect = true;
+//                    }
+//
+//                    if (tempList.getSum() > max) {
+//                        numSets = choices.size() - 1;
+//                        max = tempList.getSum();
+//                    }
+//                }
+//            }
+//        }
+//        cout << "numSets is" << numSets;
+//        choices[numSets].showSublist();
+//    }
+//}
+
+
+
+
+
+
+void subsetSumInt(int TARGET, vector<int> dataSet) {
+    vector<Sublist> choices;
+    int numSets, max, masterSum;
+    numSets = 0;
+    max = 0;
+    masterSum = 0;
+    bool foundPerfect = false;
+
+
+    choices.clear();
+    cout << "Target time: " << TARGET << endl;
+    choices.push_back(Sublist(&dataSet));
+    vector<int>::iterator i;
+    for (i = dataSet.begin(); i != dataSet.end(); i++) {
+        masterSum = masterSum + *i;
+    }
+
+
+    //If the sum of the master list smaller or equal to the target, then show
+    //all the elements
+    if (masterSum <= TARGET) {
+        Sublist bestSublist = Sublist(&dataSet);
+        for (unsigned int k = 0; k < dataSet.size(); k++) {
+            bestSublist = bestSublist.addItem(k);
+        }
+        choices.push_back(bestSublist);
+        numSets = choices.size() - 1;
+        choices[numSets].showSublist();
+        foundPerfect = true;
+    }
+
+
+    //If the sum of the master list bigger than the target
+    Sublist tempList;
+    int size;
+    //If the master set is empty
+    if (dataSet.size() == 0) {
+        cout << "\nNo empty master set please.\n" << endl;
+    }
+    else {
+        for (unsigned int i = 0; !foundPerfect && i < dataSet.size(); i++) {
+            size = choices.size();
+
+
+            for (int k = 0; !foundPerfect && k < size; k++) {
+                tempList = choices[k].addItem(i);
+
+
+                if (tempList.getSum() <= TARGET) {
+                    choices.push_back(tempList);
+
+
+                    if (tempList.getSum() == TARGET) {
+                        numSets = choices.size() - 1;
+                        foundPerfect = true;
+                    }
+
+
+                    if (tempList.getSum() > max) {
+                        numSets = choices.size() - 1;
+                        max = tempList.getSum();
+                    }
+                }
+            }
+        }
+        choices[numSets].showSublist();
+    }
+}
+
+
+
+
+void displayOneTune(const iTunesEntry & tune)
+{
+    cout << tune.getArtist() << " | ";
+    cout << tune.getTitle() << " | ";
+    // cout << tune.getTime() << " | ";
+    cout << " " << tune.convertTimeToString() << endl;
+}
+
+
+
+
+
+
+
+
+
+
+#include <vector>
+#include <iostream>
+#include "iTunes.h"
+using namespace std;
+
+
+//-------------------------------class Sublist prototype--------------
+class Sublist
+{
+public:
+    Sublist(vector<int> *orig = NULL)
+    : sum(0), originalObjects(orig) { }
+    Sublist addItem(int indexOfItemToAdd);
+    void showSublist() const;
+    int getSum() const { return sum; }
+    friend ostream& operator<<(ostream& out, const iTunesEntry& object);
+    friend int operator+(const int left, const iTunesEntry& right);
+    //friend ostream& operator<<(ostream& str, const iTunesEntry& s);
+    //friend int operator+(const int& lhs, const iTunesEntry& rhs);
+     //iTunesEntry &operator[](int k);
+
+
+    
+private:
+    int sum;
+    vector<int> *originalObjects;
+    vector<int> indices;
+};
+
+
+//------------------------------Class Sublist definition----------------
+//Display
+ostream& operator<<(ostream& out, const iTunesEntry& object) {
+    out << object.getTitle() << " by " << object.getArtist() << "("
+    << object.getTime() << ")";
+    return out;
+}
+
+
+//overload "+"
+int operator+(const int left, const iTunesEntry& right) {
+    return left + right.getTime();
+}
+
+
+Sublist Sublist::addItem(int indexOfItemToAdd) {
+    Sublist newSublist = *this;
+    newSublist.indices.push_back(indexOfItemToAdd);
+    newSublist.sum = newSublist.sum + originalObjects->at(indexOfItemToAdd);
+    return newSublist;
+}
+
+
+//Show all the sublist that within the target, no greater sum of target should
+//be displayed
+void Sublist::showSublist() const {
+    //If there is no sublist that met requirement
+    if (indices.size() == 0) {
+        cout << "No subList found." << endl;
+    }
+    else {
+        cout << "\nSublist is-------------------------------------------" << '\n'
+        << "sum: " << sum << "\n" << endl;
+        
+        for (unsigned int i = 0; i < indices.size() - 1; i++) {
+            cout << "array[" << indices[i] << "] = "
+            << originalObjects->at(indices[i]) << ", ";
+        }
+        cout << "array[" << indices[indices.size() - 1] << "] = "
+        << originalObjects->at(indices[indices.size() - 1]) << '\n' << endl;
+    }
+}
+
+
+//------------------------------Global helper prototype----------------------------
+//void subsetSumInt(int TARGET, vector<int> dataSet);
+void subsetSumTunes(int TARGET, vector<iTunesEntry> dataSet);
+void displayOneTune(const iTunesEntry & tune);
+
+
+//------------------------------Gobal Definition----------------------------
+
+
+//void subsetSumTunes(int TARGET, vector<iTunesEntry> dataSet) {
+//    
+//    vector<Sublist> choices;
+//    int numSets, max, masterSum;
+//    numSets = 0;
+//    max = 0;
+//    masterSum = 0;
+//    bool foundPerfect = false;
+//
+//    choices.clear();
+//    cout << "Target time: " << TARGET << endl;
+//    choices.push_back(Sublist(&dataSet));
+//    vector<iTunesEntry>::iterator i;
+//    for (i = dataSet.begin(); i != dataSet.end(); i++) {
+//        masterSum = masterSum + *i;
+//    }
+//
+//    //If the sum of the master list smaller or equal to the target, then show
+//    //all the elements
+//    if (masterSum <= TARGET) {
+//        Sublist bestSublist = Sublist(&dataSet);
+//        for (unsigned int k = 0; k < dataSet.size(); k++) {
+//            bestSublist = bestSublist.addItem(k);
+//        }
+//        choices.push_back(bestSublist);
+//        numSets = choices.size() - 1;
+//        choices[numSets].showSublist();
+//        foundPerfect = true;
+//    }
+//
+//    //If the sum of the master list bigger than the target
+//    Sublist tempList;
+//    int size;
+//    //If the master set is empty
+//    if (dataSet.size() == 0) {
+//        cout << "\nNo empty master set please.\n" << endl;
+//    }
+//    else {
+//        for (unsigned int i = 0; !foundPerfect && i < dataSet.size(); i++) {
+//            size = choices.size();
+//
+//            for (int k = 0; !foundPerfect && k < size; k++) {
+//                tempList = choices[k].addItem(i);
+//
+//                if (tempList.getSum() <= TARGET) {
+//                    choices.push_back(tempList);
+//
+//                    if (tempList.getSum() == TARGET) {
+//                        numSets = choices.size() - 1;
+//                        foundPerfect = true;
+//                    }
+//
+//                    if (tempList.getSum() > max) {
+//                        numSets = choices.size() - 1;
+//                        max = tempList.getSum();
+//                    }
+//                }
+//            }
+//        }
+//        cout << "numSets is" << numSets;
+//        choices[numSets].showSublist();
+//    }
+//}
+
+
+
+
+
+
+void subsetSumInt(int TARGET, vector<int> dataSet) {
+    vector<Sublist> choices;
+    int numSets, max, masterSum;
+    numSets = 0;
+    max = 0;
+    masterSum = 0;
+    bool foundPerfect = false;
+
+
+    choices.clear();
+    cout << "Target time: " << TARGET << endl;
+    choices.push_back(Sublist(&dataSet));
+    vector<int>::iterator i;
+    for (i = dataSet.begin(); i != dataSet.end(); i++) {
+        masterSum = masterSum + *i;
+    }
+
+
+    //If the sum of the master list smaller or equal to the target, then show
+    //all the elements
+    if (masterSum <= TARGET) {
+        Sublist bestSublist = Sublist(&dataSet);
+        for (unsigned int k = 0; k < dataSet.size(); k++) {
+            bestSublist = bestSublist.addItem(k);
+        }
+        choices.push_back(bestSublist);
+        numSets = choices.size() - 1;
+        choices[numSets].showSublist();
+        foundPerfect = true;
+    }
+
+
+    //If the sum of the master list bigger than the target
+    Sublist tempList;
+    int size;
+    //If the master set is empty
+    if (dataSet.size() == 0) {
+        cout << "\nNo empty master set please.\n" << endl;
+    }
+    else {
+        for (unsigned int i = 0; !foundPerfect && i < dataSet.size(); i++) {
+            size = choices.size();
+
+
+            for (int k = 0; !foundPerfect && k < size; k++) {
+                tempList = choices[k].addItem(i);
+
+
+                if (tempList.getSum() <= TARGET) {
+                    choices.push_back(tempList);
+
+
+                    if (tempList.getSum() == TARGET) {
+                        numSets = choices.size() - 1;
+                        foundPerfect = true;
+                    }
+
+
+                    if (tempList.getSum() > max) {
+                        numSets = choices.size() - 1;
+                        max = tempList.getSum();
+                    }
+                }
+            }
+        }
+        choices[numSets].showSublist();
+    }
+}
+
+
+
+
+void displayOneTune(const iTunesEntry & tune)
+{
+    cout << tune.getArtist() << " | ";
+    cout << tune.getTitle() << " | ";
+    // cout << tune.getTime() << " | ";
+    cout << " " << tune.convertTimeToString() << endl;
+}
+
+
+
+
+//int main()
+//{
+//    //test for partA
+//    const int TARGET = 180;
+//    vector<int> dataSet;
+//    
+//    dataSet.push_back(20); dataSet.push_back(12); dataSet.push_back(22);
+//    dataSet.push_back(15); dataSet.push_back(25);
+//    dataSet.push_back(19); dataSet.push_back(29);
+//    dataSet.push_back(18);
+//    dataSet.push_back(11); dataSet.push_back(13); dataSet.push_back(17);
+//    
+//    //const int TARGET = 3600;
+//    subsetSumInt(TARGET, dataSet);
+//    
+//    //test for part B
+//   
+//    
+////    vector<iTunesEntry> dataSet;
+////    vector<Sublist> choices;
+////    vector<Sublist>::iterator iter, iterBest;
+////    int k, j, numSets, max, array_size, masterSum;
+////    bool foundPerfect;
+//    
+//    
+//    
+//
+//
+//    // read the data
+////    iTunesEntryReader tunes_input("/Users/mianwei/Downloads/itunes_file.txt");
+////    if (tunes_input.readError())
+////    {
+////        cout << "couldn't open " << tunes_input.getFileName()
+////        << " for input.\n";
+////        exit(1);
+////    }
+////
+//    
+//    // time the algorithm ------------------------
+//    clock_t startTime, stopTime;
+//    startTime = clock();
+//    
+//    // create a vector of objects for our own use:
+////    array_size = tunes_input.getNumTunes();
+////    iTunesEntry *tunesArray = new iTunesEntry[array_size];
+////    for (int k = 0; k < array_size; k++)
+////        dataSet2.push_back(tunes_input[k]);
+////        tunesArray[k] =  tunes_input[k];
+////    array_size = tunes_input.getNumTunes();
+////    cout << " array_size is " << array_size;
+////    for (int k = 0; k < array_size; k++)
+////        dataSet.push_back(tunes_input[k]);
+////    //cout << "Target time: " << TARGET << endl;
+////
+////    subsetSumTunes(TARGET, dataSet);
+////
+//
+//    // how we determine the time elapsed -------------------
+//    stopTime = clock();
+//
+////    // show the array
+////    for (int k = 0; k < array_size; k++)
+////        displayOneTune(tunesArray[k]);
+////    cout << endl << endl;
+//    
+//    // report algorithm time
+//    cout << "\nAlgorithm Elapsed Time: "
+//        << (double)(stopTime - startTime)/(double)CLOCKS_PER_SEC
+//        << " seconds." << endl << endl;
+//    
+////    delete[] tunesArray;
+//    return 0;
+//}
+//
+//

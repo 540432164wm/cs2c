@@ -1,0 +1,68 @@
+//
+//  main.cpp
+//  2cLab8
+//
+//  Created by mian wei  on 6/12/18.
+//  Copyright © 2018 mian wei. All rights reserved.
+//
+
+
+#include <iostream>
+#include <time.h>
+#include <fstream>
+#include <vector>
+#include <ctime>
+#include "FHvector.h"
+#include "FHsort.h"
+using namespace std;
+
+
+template <typename Comparable>
+void quickSort(FHvector<Comparable> & a, int left, int right, int recLimit)
+{
+    Comparable pivot;
+    int i, j;
+    
+    if (left + recLimit <= right)
+    {
+        //Get the median
+        pivot = median3(a, left, right);
+        for (i = left, j = right - 1; ; ) {
+            //travel until i is greater than pivot
+            while (a[++i] < pivot) {
+                ;
+            }
+            //travel until j is smaller than pivot
+            while (pivot < a[--j]) {
+                ;
+            }
+            if (i < j) {
+                mySwapFH(a[i], a[j]);
+            }
+            else
+                break;
+        }
+        
+        //swap the pivot with the number i and j meet
+        swap(a[i], a[right - 1]);
+        
+        //recursive call for the left side
+        quickSort(a, left, i - 1, recLimit);
+        //recursive call for the right side
+        quickSort(a, i + 1, right, recLimit);
+    }
+    else {
+        // use insertion
+        insertionSort(a, left, right);
+    }
+}
+
+
+template <typename Comparable>
+void quickSort(FHvector<Comparable> & a, int recLimit)
+{
+    //If the recLimit smaller than two, make it two
+    if (recLimit < 2)
+        recLimit = 2;
+    quickSort(a, 0, a.size() - 1, recLimit);
+}

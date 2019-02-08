@@ -1,0 +1,251 @@
+﻿//
+//  main.cpp
+//  2Clab7
+//
+//  Created by mian wei  on 6/5/18.
+//  Copyright © 2018 mian wei. All rights reserved.
+//
+
+
+
+
+#include <iostream>
+#include <vector>
+#include <ctime>
+#include "PQ.h"
+#include "FHbinHeap.h"
+#include <queue>
+using namespace std;
+
+
+int main(int argc, const char * argv[])
+{
+    srand((unsigned)time(NULL));
+    clock_t startTime, stopTime;
+    
+    PQsortedList<int> myList;
+    myList.insert(20);
+    myList.insert(4);
+    myList.insert(80);
+    
+    cout << myList.remove() << endl;
+    cout << myList.remove() << endl;
+    cout << myList.remove() << endl;
+    
+    PQunsortedList<int> myList2;
+    myList2.insert(20);
+    myList2.insert(4);
+    myList2.insert(80);
+    
+    cout << myList2.remove() << endl;
+    cout << myList2.remove() << endl;
+    cout << myList2.remove() << endl;
+    
+//    //Test for already-sorted values
+//    int numNumbers = 40000;
+//    vector<int> inorderInsert;
+//    for (int i = 0; i < numNumbers; i++) {
+//       inorderInsert.push_back(i);
+//    }
+//
+//    //Test for inverse values
+//    int numNumbers = 40000;
+//    vector<int> reverseOrderInsert;
+//    for (int i = numNumbers; i > 0; i--) {
+//       reverseOrderInsert.push_back(i);
+//    }
+    
+    // Timing on random list of numbers
+    int sizes[] = { 5000, 10000, 20000, 40000 };
+    int numSizesToTest = sizeof(sizes) / sizeof(sizes[0]);
+    
+    for (int i = 0; i < numSizesToTest; i++) {
+        vector<int> randNumbersToInsert;
+        int numNumbers = sizes[i];
+        for (int j = 0; j < numNumbers; j++) {
+            // arbitrary - make random numbers up to 5 times the size of the vector, to spread them out
+            int r = rand() / (double)RAND_MAX * numNumbers * 5;
+            randNumbersToInsert.push_back(r);
+        }
+        
+        PQsortedList<int> sortedListPQ;
+        PQunsortedList<int> unsortedListPQ;
+        FHbinHeap<int> heapPQ;
+        priority_queue<int> PQList;
+        
+        // put your tests here:
+        cout << "\n----------------unsorted list----------------" << endl;
+        startTime = clock();
+        for (int k = 0; k < numNumbers; k++) {
+            unsortedListPQ.insert(randNumbersToInsert[k]);
+        }
+        stopTime = clock();
+        
+        
+        cout << "\nSize = " << numNumbers << " inserted into unsortedListPQ.";
+        cout << "Elapsed Time: "
+        << (double)(stopTime - startTime) / (double)CLOCKS_PER_SEC
+        << " seconds." << endl << endl;
+        
+        //Test remove time for the sorted list
+        startTime = clock();
+        for (int i = 0; i < numNumbers; i++) {
+            unsortedListPQ.remove();
+        }
+        stopTime = clock();
+        
+        //Check the list is empty
+        try
+        {
+            unsortedListPQ.remove();
+        }
+        catch (...)
+        {
+            cout << "List is empty, can't remove" << endl;
+        }
+        
+        cout << "\nSize = " << numNumbers << " remove from unsortedListPQ.";
+        cout << "Elapsed Time: "
+        << (double)(stopTime - startTime) / (double)CLOCKS_PER_SEC
+        << " seconds." << endl << endl;
+        
+        cout << "\n---------------sorted list--------------------" << endl;
+        startTime = clock();
+        for (int i = 0; i < numNumbers; i++) {
+            sortedListPQ.insert(randNumbersToInsert[i]);
+            
+//            //For inorder and reverse order only
+//            //sortedListPQ.insert(inorderInsert[i]);
+//            sortedListPQ.insert(reverseOrderInsert[i]);
+        }
+        stopTime = clock();
+        
+        cout << "\nSize = " << numNumbers << " inserted into sortedListPQ.";
+        cout << "Elapsed Time: "
+        << (double)(stopTime - startTime) / (double)CLOCKS_PER_SEC
+        << " seconds." << endl << endl;
+        
+        startTime = clock();
+        for (int k = 0; k < numNumbers; k++) {
+            sortedListPQ.remove();
+        }
+        stopTime = clock();
+        
+        try
+        {
+            sortedListPQ.remove();
+        }
+        catch (...)
+        {
+            cout << "can't remove from a empty list" << endl;
+        }
+        
+        cout << "\nSize = " << numNumbers << " remove from sortedListPQ.";
+        cout << "Elapsed Time: "
+        << (double)(stopTime - startTime) / (double)CLOCKS_PER_SEC
+        << " seconds." << endl << endl;
+        
+        cout << "\n------------------------heapPQ------------------" << endl;
+        startTime = clock();
+        for (int i = 0; i < numNumbers; i++) {
+            heapPQ.insert(randNumbersToInsert[i]);
+            
+//            //For in order and reverse order
+//            //heapPQ.insert(inorderInsert[i]);
+//            heapPQ.insert(reverseOrderInsert[i]);
+        }
+        stopTime = clock();
+        
+        cout << "\nSize = " << numNumbers << " insert from heapPQ.";
+        cout << "Elapsed Time: "
+        << (double)(stopTime - startTime) / (double)CLOCKS_PER_SEC
+        << " seconds." << endl << endl;
+        
+        startTime = clock();
+        for (int k = 0; k < numNumbers; k++) {
+            heapPQ.remove();
+        }
+        stopTime = clock();
+        
+        try
+        {
+            heapPQ.remove();
+        }
+        catch (...)
+        {
+            cout << "empty in heapPQ, can't remove" << endl;
+        }
+        
+        cout << "\nSize = " << numNumbers << " remove from heapPQ.";
+        cout << "Elapsed Time: "
+        << (double)(stopTime - startTime) / (double)CLOCKS_PER_SEC
+        << " seconds." << endl << endl;
+        
+        
+
+
+    // put your tests here:
+    cout << "\n--------------------Self Test-----------------" << endl;
+    PQunsortedList<int> tempList;
+
+
+    tempList.insert(60);
+    tempList.insert(40);
+    tempList.insert(80);
+    tempList.insert(110);
+    tempList.insert(80);
+    
+    cout << "1:" << tempList.remove() << endl;
+    cout << "2:" << tempList.remove() << endl;
+    cout << "3:" << tempList.remove() << endl;
+    cout << "4:" << tempList.remove() << endl;
+    cout << "5:" << tempList.remove() << endl;
+    
+    try
+    {
+       cout << tempList.remove();
+    }
+    catch (...)
+    {
+       cout << "The list is empty, nothing to remove" << endl;
+    }
+    
+    cout << "\n---------------------Test for Sorted List-------------" << endl;
+    PQsortedList<int> testList;
+    testList.insert(50);
+    testList.insert(30);
+    testList.insert(20);
+    testList.insert(10);
+    testList.insert(40);
+    testList.insert(70);
+    testList.insert(110);
+    
+    cout << "1:" << testList.remove() << endl;
+    cout << "2:" << testList.remove() << endl;
+    cout << "3:" << testList.remove() << endl;
+    cout << "4:" << testList.remove() << endl;
+    cout << "5:" << testList.remove() << endl;
+    cout << "6:" << testList.remove() << endl;
+    cout << "7:" << testList.remove() << endl;
+    
+    }
+}
+/*
+ --------------------Self Test-----------------
+ 1:40
+ 2:60
+ 3:80
+ 4:80
+ 5:110
+ The list is empty, nothing to remove
+ 
+ ---------------------Test for Sorted List-------------
+ 1:10
+ 2:20
+ 3:30
+ 4:40
+ 5:50
+ 6:70
+ 7:110
+ Program ended with exit code: 0
+ */
